@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Let's Hang Out</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1e293b;
+  font-family:Arial, sans-serif;
+  color:#f8fafc;
+}
+.card{
+  background:#0f172a;
+  padding:26px;
+  border-radius:16px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+button{
+  padding:10px 20px;
+  margin:10px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.yes{background:#22c55e;color:#022c22;}
+.no{background:#ef4444;color:#450a0a;}
+.next{background:#334155;color:#fff;}
+input,textarea{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+  border-radius:8px;
+  border:none;
+}
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="step1">
+  <h3>Let’s hang out sometime?</h3>
+  <button class="yes" onclick="yes()">Yes</button>
+  <button class="no" onclick="no()">No</button>
+</div>
+
+<div class="card hidden" id="yesStep">
+  <h3>When works for you?</h3>
+  <button onclick="setDate('20 Dec')">20 Dec</button>
+  <button onclick="setDate('24 Dec')">24 Dec</button>
+  <button onclick="setDate('5 Jan')">5 Jan</button>
+  <button onclick="showOther()">Any other</button>
+  <input type="date" id="otherDate" class="hidden">
+  <button class="next" onclick="nextYes()">Next</button>
+</div>
+
+<div class="card hidden" id="placeStep">
+  <h3>Kahan milenge?</h3>
+  <input id="place" placeholder="Place">
+  <button class="next" onclick="finishYes()">Next</button>
+</div>
+
+<div class="card hidden" id="noStep">
+  <h3>Why? (optional)</h3>
+  <textarea id="reason"></textarea>
+  <button class="next" onclick="finishNo()">Send response</button>
+</div>
+
+<div class="card hidden" id="final">
+  <h3>Thank you 🤍</h3>
+  <p>I appreciate your honesty.</p>
+  <a id="mail"><button class="yes">Send response</button></a>
+</div>
+
+<script>
+let selectedDate="";
+
+function yes(){
+  hideAll();
+  document.getElementById("yesStep").style.display="block";
+}
+function no(){
+  hideAll();
+  document.getElementById("noStep").style.display="block";
+}
+function setDate(d){
+  selectedDate=d;
+  document.getElementById("otherDate").classList.add("hidden");
+}
+function showOther(){
+  selectedDate="";
+  document.getElementById("otherDate").classList.remove("hidden");
+}
+function nextYes(){
+  if(!selectedDate){
+    selectedDate=document.getElementById("otherDate").value;
+  }
+  hideAll();
+  document.getElementById("placeStep").style.display="block";
+}
+function finishYes(){
+  const place=document.getElementById("place").value;
+  const body=encodeURIComponent(
+    "Answer: Yes\nDate: "+selectedDate+"\nPlace: "+place
+  );
+  document.getElementById("mail").href=
+   "mailto:Manasbaranwal18@gmail.com?subject=Response&body="+body;
+  hideAll();
+  document.getElementById("final").style.display="block";
+}
+function finishNo(){
+  const reason=document.getElementById("reason").value;
+  const body=encodeURIComponent(
+    "Answer: No\nReason: "+reason
+  );
+  document.getElementById("mail").href=
+   "mailto:Manasbaranwal18@gmail.com?subject=Response&body="+body;
+  hideAll();
+  document.getElementById("final").style.display="block";
+}
+function hideAll(){
+  document.querySelectorAll(".card").forEach(c=>c.style.display="none");
+}
+</script>
+
+</body>
+</html>
